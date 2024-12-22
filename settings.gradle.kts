@@ -32,4 +32,8 @@ include(":core:domain")
 include(":core:data")
 
 // feature
-include(":feature")
+include(":feature:onboarding")
+include(":feature:importwallet")
+include(":feature:createwallet")
+include(":feature:home")
+include(":feature:setting")

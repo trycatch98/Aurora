@@ -29,6 +29,12 @@ android {
 dependencies {
     implementation(projects.core.designsystem)
 
+    implementation(projects.feature.onboarding)
+    implementation(projects.feature.importwallet)
+    implementation(projects.feature.createwallet)
+    implementation(projects.feature.home)
+    implementation(projects.feature.setting)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.layout)
