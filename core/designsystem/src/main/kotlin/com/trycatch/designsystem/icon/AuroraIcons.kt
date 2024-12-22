@@ -31,5 +31,5 @@ object AuroraIcons {
     val Wallet = R.drawable.ic_wallet
     val GradientWallet = R.drawable.ic_select_wallet
     val Setting = R.drawable.ic_setting
-    val GradientSetting = R.drawable.ic_setting
+    val GradientSetting = R.drawable.ic_select_setting
 }
