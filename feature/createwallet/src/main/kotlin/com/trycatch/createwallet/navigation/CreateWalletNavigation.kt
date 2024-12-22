@@ -20,16 +20,18 @@
  * SOFTWARE.
  */
 
-package com.trycatch.designsystem.icon
+package com.trycatch.createwallet.navigation
 
-import com.trycatch.aurora.designsystem.R
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import com.trycatch.createwallet.CreateWalletRoute
+import kotlinx.serialization.Serializable
 
-object AuroraIcons {
-    val ArrowBack = R.drawable.ic_arrow_back
-    val Sent = R.drawable.ic_sent
-    val Received = R.drawable.ic_receive
-    val Wallet = R.drawable.ic_wallet
-    val GradientWallet = R.drawable.ic_select_wallet
-    val Setting = R.drawable.ic_setting
-    val GradientSetting = R.drawable.ic_select_setting
+@Serializable
+data object CreateWalletRoute
+
+fun NavGraphBuilder.createWalletScreen() {
+    composable<CreateWalletRoute> {
+        CreateWalletRoute()
+    }
 }

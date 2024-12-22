@@ -20,16 +20,14 @@
  * SOFTWARE.
  */
 
-package com.trycatch.designsystem.icon
+package com.trycatch.setting
 
-import com.trycatch.aurora.designsystem.R
+import androidx.compose.runtime.Composable
 
-object AuroraIcons {
-    val ArrowBack = R.drawable.ic_arrow_back
-    val Sent = R.drawable.ic_sent
-    val Received = R.drawable.ic_receive
-    val Wallet = R.drawable.ic_wallet
-    val GradientWallet = R.drawable.ic_select_wallet
-    val Setting = R.drawable.ic_setting
-    val GradientSetting = R.drawable.ic_select_setting
+@Composable
+internal fun SettingRoute() {
+    SettingScreen()
 }
+
+@Composable
+internal fun SettingScreen() {}

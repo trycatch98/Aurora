@@ -20,16 +20,32 @@
  * SOFTWARE.
  */
 
-package com.trycatch.designsystem.icon
+package com.trycatch.aurora.navigation
 
-import com.trycatch.aurora.designsystem.R
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import com.trycatch.designsystem.icon.AuroraIcons
+import com.trycatch.home.navigation.HomeRoute
+import com.trycatch.setting.navigation.SettingRoute
+import com.trycatch.aurora.feature.home.R as Home
+import com.trycatch.aurora.feature.setting.R as Setting
 
-object AuroraIcons {
-    val ArrowBack = R.drawable.ic_arrow_back
-    val Sent = R.drawable.ic_sent
-    val Received = R.drawable.ic_receive
-    val Wallet = R.drawable.ic_wallet
-    val GradientWallet = R.drawable.ic_select_wallet
-    val Setting = R.drawable.ic_setting
-    val GradientSetting = R.drawable.ic_select_setting
+enum class TopLevelDestination(
+    @DrawableRes val selectedIcon: Int,
+    @DrawableRes val unselectedIcon: Int,
+    @StringRes val titleTextId: Int,
+    val route: Any,
+) {
+    HOME(
+        selectedIcon = AuroraIcons.GradientWallet,
+        unselectedIcon = AuroraIcons.Wallet,
+        titleTextId = Home.string.home_title,
+        route = HomeRoute
+    ),
+    SETTING(
+        selectedIcon = AuroraIcons.GradientSetting,
+        unselectedIcon = AuroraIcons.Setting,
+        titleTextId = Setting.string.setting_title,
+        route = SettingRoute,
+    )
 }
