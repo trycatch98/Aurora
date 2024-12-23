@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.trycatch.createwallet.model.toPresentation
 import com.trycatch.domain.usecase.mnemonic.CreateMnemonicUseCase
+import com.trycatch.domain.usecase.mnemonic.CreateMnemonicValidationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,13 +37,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateWalletViewModel @Inject constructor(
-    private val createMnemonicUseCase: CreateMnemonicUseCase
+    private val createMnemonicUseCase: CreateMnemonicUseCase,
+    private val createMnemonicValidationUseCase: CreateMnemonicValidationUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CreateWalletUiState.DEFAULT)
     val uiState = _uiState
 
     private val _sideEffects = MutableSharedFlow<CreateWalletSideEffect>()
     val sideEffects = _sideEffects.asSharedFlow()
+
+    private val ignoreSeedPhase = mutableSetOf<String>()
 
     init {
         fetchMnemonic()
@@ -62,15 +66,55 @@ class CreateWalletViewModel @Inject constructor(
     }
 
     fun nextPhase() {
+        uiState.value.let { value ->
+            when (val phase = Phase.nextPhase(value.phase)) {
+                is Phase.ConfirmPhase -> {
+                    viewModelScope.launch {
+                        createMnemonicValidationUseCase(
+                            value.mnemonic.toDomain(),
+                            5,
+                            ignoreSeedPhase
+                        ).collect { mnemonicValidation ->
+                            ignoreSeedPhase.add(mnemonicValidation.target)
+                            _uiState.update {
+                                it.copy(
+                                    phase = phase,
+                                    mnemonicValidation = mnemonicValidation.toPresentation(),
+                                    selectedMnemonic = ""
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Phase.SuccessPhase -> nextPhase(phase)
+                Phase.ViewPhase -> nextPhase(phase)
+                null -> {}
+            }
+        }
     }
 
     private fun nextPhase(phase: Phase) {
+        _uiState.update {
+            it.copy(
+                phase = phase
+            )
+        }
     }
 
     fun verifyMnemonic() {
+        uiState.value.let { value ->
+            if (value.mnemonicValidation?.target == value.selectedMnemonic)
+                nextPhase()
+        }
     }
 
     fun onMnemonicSelected(seed: String) {
+        _uiState.update {
+            it.copy(
+                selectedMnemonic = seed
+            )
+        }
     }
 
     fun onBackClicked() {

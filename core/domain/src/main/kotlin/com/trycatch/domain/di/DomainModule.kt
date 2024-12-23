@@ -24,6 +24,8 @@ package com.trycatch.domain.di
 
 import com.trycatch.domain.usecase.mnemonic.CreateMnemonicUseCase
 import com.trycatch.domain.usecase.mnemonic.CreateMnemonicUseCaseImpl
+import com.trycatch.domain.usecase.mnemonic.CreateMnemonicValidationUseCase
+import com.trycatch.domain.usecase.mnemonic.CreateMnemonicValidationUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -36,4 +38,8 @@ internal abstract class DomainModule {
     @Binds
     @Singleton
     abstract fun bindCreateMnemonicUseCase(useCase: CreateMnemonicUseCaseImpl): CreateMnemonicUseCase
+
+    @Binds
+    @Singleton
+    abstract fun bindCreateMnemonicValidationUseCase(useCase: CreateMnemonicValidationUseCaseImpl): CreateMnemonicValidationUseCase
 }

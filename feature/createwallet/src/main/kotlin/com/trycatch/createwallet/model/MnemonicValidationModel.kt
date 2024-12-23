@@ -23,6 +23,7 @@
 package com.trycatch.createwallet.model
 
 import com.trycatch.domain.model.Mnemonic
+import com.trycatch.domain.model.MnemonicValidation
 
 data class MnemonicValidationModel(
     val target: String,
@@ -32,3 +33,6 @@ data class MnemonicValidationModel(
     fun toDomain(): Mnemonic =
         Mnemonic(words)
 }
+
+fun MnemonicValidation.toPresentation(): MnemonicValidationModel =
+    MnemonicValidationModel(target, targetIndex, words)

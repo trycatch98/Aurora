@@ -22,23 +22,8 @@
 
 package com.trycatch.domain.model
 
-class Mnemonic(
+data class MnemonicValidation(
+    val target: String,
+    val targetIndex: Int,
     val words: List<String>
-) {
-    // 니노닉 단어 생성
-    fun generateMnemonic(): Mnemonic {
-        return Mnemonic(words.shuffled().take(12))
-    }
-
-    // `ignoreSeeds`를 제외하고 랜덤으로 하나 선택
-    fun pickRandomSeed(ignoreSeeds: Set<String>): String {
-        val availableSeeds = words.filterNot { it in ignoreSeeds }
-        return availableSeeds.random()
-    }
-
-    // 주어진 단어를 제외하고 `selectionCount`만큼 랜덤으로 선택
-    fun pickRandomSelection(excludedSeed: String, selectionCount: Int): List<String> {
-        val filteredWords = words.filterNot { it == excludedSeed }
-        return filteredWords.shuffled().take(selectionCount)
-    }
-}
+)
