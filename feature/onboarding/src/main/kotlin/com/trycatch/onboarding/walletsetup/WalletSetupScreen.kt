@@ -22,12 +22,117 @@
 
 package com.trycatch.onboarding.walletsetup
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
+import com.trycatch.aurora.feature.onboarding.R
+import com.trycatch.designsystem.component.AuroraBackground
+import com.trycatch.designsystem.component.AuroraButton
+import com.trycatch.designsystem.component.AuroraGradientButton
+import com.trycatch.designsystem.component.AuroraText
+import com.trycatch.designsystem.theme.AuroraTheme
 
 @Composable
-internal fun WalletSetupRoute() {
-    WalletSetupScreen()
+internal fun WalletSetupRoute(
+    navigateToImportWallet: () -> Unit,
+    navigateToCreateWallet: () -> Unit,
+    viewModel: WalletSetupViewModel = hiltViewModel()
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(viewModel.sideEffects, lifecycleOwner) {
+        viewModel.sideEffects.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is WalletSetupSideEffect.NavigateToImportWallet ->
+                        navigateToImportWallet()
+                    is WalletSetupSideEffect.NavigateToCreateWallet ->
+                        navigateToCreateWallet()
+                }
+            }
+    }
+
+    WalletSetupScreen(
+        onImportWalletClick = viewModel::clickImportWallet,
+        onCreateWalletClick = viewModel::clickCreateWallet
+    )
 }
 
 @Composable
-internal fun WalletSetupScreen() {}
+internal fun WalletSetupScreen(
+    onImportWalletClick: () -> Unit,
+    onCreateWalletClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(158.dp))
+
+        Image(
+            modifier = Modifier
+                .size(295.dp),
+            painter = painterResource(R.drawable.ic_wallet_set_up),
+            contentDescription = "",
+        )
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+        AuroraText(
+            text = stringResource(R.string.setup_heading),
+            style = AuroraTheme.typography.bigType
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        AuroraButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .padding(horizontal = 24.dp),
+            text = stringResource(R.string.setup_import_button),
+            onClick = onImportWalletClick
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        AuroraGradientButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .padding(horizontal = 24.dp),
+            text = stringResource(R.string.setup_create_button),
+            onClick = onCreateWalletClick
+        )
+
+        Spacer(modifier = Modifier.height(42.dp))
+    }
+}
+
+@Preview
+@Composable
+fun WalletSetUpScreenPreview() {
+    AuroraTheme {
+        AuroraBackground {
+            WalletSetupScreen(
+                onImportWalletClick = {},
+                onCreateWalletClick = {}
+            )
+        }
+    }
+}

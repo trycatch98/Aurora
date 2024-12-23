@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding1_heading1">Property</string>
+    <string name="onboarding1_heading2">Diversity</string>
+
+    <string name="onboarding2_heading1">Safe</string>
+    <string name="onboarding2_heading2">Security</string>
+
+    <string name="onboarding3_heading1">Convenient</string>
+    <string name="onboarding3_heading2">Transaction</string>
+
+    <string name="onboarding_button">Get Start</string>
+
+    <string name="setup_heading">Wallet Setup</string>
+
+    <string name="setup_import_button">Import Using Seed Phrase</string>
+    <string name="setup_create_button">Create a New Wallet</string>
+</resources>

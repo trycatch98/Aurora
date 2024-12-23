@@ -20,40 +20,30 @@
  * SOFTWARE.
  */
 
-package com.trycatch.onboarding.navigation
+package com.trycatch.onboarding.walletsetup
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.trycatch.onboarding.OnboardingRoute
-import com.trycatch.onboarding.walletsetup.WalletSetupRoute
-import kotlinx.serialization.Serializable
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-@Serializable
-data object OnboardingRoute
+@HiltViewModel
+class WalletSetupViewModel @Inject constructor(): ViewModel() {
+    private val _sideEffects = MutableSharedFlow<WalletSetupSideEffect>()
+    val sideEffects = _sideEffects.asSharedFlow()
 
-@Serializable
-data object WalletSetupRoute
-
-@Serializable
-data object OnboardingBaseRoute
-
-fun NavGraphBuilder.onboardingScreen(
-    navigateToWalletSetup: () -> Unit,
-    navigateToImportWallet: () -> Unit,
-    navigateToCreateWallet: () -> Unit
-) {
-    navigation<OnboardingBaseRoute>(startDestination = OnboardingRoute) {
-        composable<OnboardingRoute> {
-            OnboardingRoute(
-                navigateToWalletSetup = navigateToWalletSetup
-            )
+    fun clickImportWallet() {
+        viewModelScope.launch {
+            _sideEffects.emit(WalletSetupSideEffect.NavigateToImportWallet)
         }
-        composable<WalletSetupRoute> {
-            WalletSetupRoute(
-                navigateToImportWallet = navigateToImportWallet,
-                navigateToCreateWallet = navigateToCreateWallet
-            )
+    }
+
+    fun clickCreateWallet() {
+        viewModelScope.launch {
+            _sideEffects.emit(WalletSetupSideEffect.NavigateToCreateWallet)
         }
     }
 }

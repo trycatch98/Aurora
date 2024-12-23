@@ -20,40 +20,14 @@
  * SOFTWARE.
  */
 
-package com.trycatch.onboarding.navigation
+package com.trycatch.onboarding.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.trycatch.onboarding.OnboardingRoute
-import com.trycatch.onboarding.walletsetup.WalletSetupRoute
-import kotlinx.serialization.Serializable
+import androidx.compose.runtime.Immutable
 
-@Serializable
-data object OnboardingRoute
-
-@Serializable
-data object WalletSetupRoute
-
-@Serializable
-data object OnboardingBaseRoute
-
-fun NavGraphBuilder.onboardingScreen(
-    navigateToWalletSetup: () -> Unit,
-    navigateToImportWallet: () -> Unit,
-    navigateToCreateWallet: () -> Unit
-) {
-    navigation<OnboardingBaseRoute>(startDestination = OnboardingRoute) {
-        composable<OnboardingRoute> {
-            OnboardingRoute(
-                navigateToWalletSetup = navigateToWalletSetup
-            )
-        }
-        composable<WalletSetupRoute> {
-            WalletSetupRoute(
-                navigateToImportWallet = navigateToImportWallet,
-                navigateToCreateWallet = navigateToCreateWallet
-            )
-        }
-    }
-}
+@Immutable
+data class OnboardingModel(
+    val image: Int,
+    val onboardingPrimaryText: Int,
+    val onboardingSecondaryText: Int,
+    val isReversed: Boolean = false
+)

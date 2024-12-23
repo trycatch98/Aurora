@@ -20,40 +20,9 @@
  * SOFTWARE.
  */
 
-package com.trycatch.onboarding.navigation
+package com.trycatch.onboarding.walletsetup
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.trycatch.onboarding.OnboardingRoute
-import com.trycatch.onboarding.walletsetup.WalletSetupRoute
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object OnboardingRoute
-
-@Serializable
-data object WalletSetupRoute
-
-@Serializable
-data object OnboardingBaseRoute
-
-fun NavGraphBuilder.onboardingScreen(
-    navigateToWalletSetup: () -> Unit,
-    navigateToImportWallet: () -> Unit,
-    navigateToCreateWallet: () -> Unit
-) {
-    navigation<OnboardingBaseRoute>(startDestination = OnboardingRoute) {
-        composable<OnboardingRoute> {
-            OnboardingRoute(
-                navigateToWalletSetup = navigateToWalletSetup
-            )
-        }
-        composable<WalletSetupRoute> {
-            WalletSetupRoute(
-                navigateToImportWallet = navigateToImportWallet,
-                navigateToCreateWallet = navigateToCreateWallet
-            )
-        }
-    }
+sealed class WalletSetupSideEffect {
+    data object NavigateToImportWallet : WalletSetupSideEffect()
+    data object NavigateToCreateWallet : WalletSetupSideEffect()
 }
