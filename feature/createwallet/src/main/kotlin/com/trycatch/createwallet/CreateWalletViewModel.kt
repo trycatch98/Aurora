@@ -28,6 +28,7 @@ import com.trycatch.createwallet.model.toPresentation
 import com.trycatch.domain.usecase.mnemonic.CreateMnemonicUseCase
 import com.trycatch.domain.usecase.mnemonic.CreateMnemonicValidationUseCase
 import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCase
+import com.trycatch.domain.usecase.wallet.CreateWalletUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +41,8 @@ import javax.inject.Inject
 class CreateWalletViewModel @Inject constructor(
     private val createMnemonicUseCase: CreateMnemonicUseCase,
     private val createMnemonicValidationUseCase: CreateMnemonicValidationUseCase,
-    private val setMnemonicUseCase: SetMnemonicUseCase
+    private val setMnemonicUseCase: SetMnemonicUseCase,
+    private val createWalletUseCase: CreateWalletUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CreateWalletUiState.DEFAULT)
     val uiState = _uiState
@@ -94,6 +96,7 @@ class CreateWalletViewModel @Inject constructor(
                 null -> {
                     viewModelScope.launch {
                         setMnemonicUseCase(value.mnemonic.toDomain())
+                        createWalletUseCase()
                         _sideEffects.emit(CreateWalletSideEffect.NavigateToHome)
                     }
                 }

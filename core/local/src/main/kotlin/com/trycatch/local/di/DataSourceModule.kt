@@ -23,7 +23,9 @@
 package com.trycatch.local.di
 
 import com.trycatch.data.datasource.MnemonicDataSource
+import com.trycatch.data.datasource.WalletLocalDataSource
 import com.trycatch.local.datasource.MnemonicDataSourceImpl
+import com.trycatch.local.datasource.WalletLocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -38,4 +40,10 @@ abstract class DataSourceModule {
     abstract fun bindMnemonicDataSource(
         mnemonicDataSourceImpl: MnemonicDataSourceImpl
     ): MnemonicDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindWalletDataSource(
+        walletDataSourceImpl: WalletLocalDataSourceImpl
+    ): WalletLocalDataSource
 }

@@ -13,6 +13,6 @@ message MnemonicLocal {
 }
 
 message UserPreferences {
-    WalletLocal wallets = 1;
+    WalletLocal wallet = 1;
     MnemonicLocal mnemonic = 2;
 }

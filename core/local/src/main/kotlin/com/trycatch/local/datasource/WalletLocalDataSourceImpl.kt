@@ -20,26 +20,33 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.local.datasource
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
-import com.trycatch.domain.repository.WalletRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import androidx.datastore.core.DataStore
+import com.trycatch.aurora.core.local.UserPreferences
+import com.trycatch.aurora.core.local.copy
+import com.trycatch.data.datasource.WalletLocalDataSource
+import com.trycatch.data.model.WalletEntity
+import com.trycatch.local.model.toData
+import com.trycatch.local.model.toLocal
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
+class WalletLocalDataSourceImpl @Inject constructor(
+    private val userPreferences: DataStore<UserPreferences>,
+): WalletLocalDataSource {
+    override fun getWallet(): Flow<WalletEntity> =
+        userPreferences.data
+            .map { preferences ->
+                preferences.wallet.toData()
+            }
 
-    @Binds
-    @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
+    override suspend fun setWallet(wallet: WalletEntity) {
+        userPreferences.updateData { preferences ->
+            preferences.copy {
+                this.wallet = wallet.toLocal()
+            }
+        }
+    }
 }

@@ -20,26 +20,13 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.crypto.model
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
-import com.trycatch.domain.repository.WalletRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.solana.vendor.TweetNaclFast.Signature.KeyPair
+import org.bitcoinj.core.Base58
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
+fun KeyPair.getBase58PublicKey(): String =
+    Base58.encode(publicKey)
 
-    @Binds
-    @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
-}
+fun KeyPair.getBase58PrivateKey(): String =
+    Base58.encode(secretKey)

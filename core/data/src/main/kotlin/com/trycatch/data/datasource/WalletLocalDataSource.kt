@@ -20,11 +20,12 @@
  * SOFTWARE.
  */
 
-package com.trycatch.crypto.model
+package com.trycatch.data.datasource
 
-import com.solana.vendor.bip39.Mnemonic
+import com.trycatch.data.model.WalletEntity
+import kotlinx.coroutines.flow.Flow
 
-fun Mnemonic.toDomain() =
-    com.trycatch.domain.model.Mnemonic(
-        words = this.phrase,
-    )
+interface WalletLocalDataSource {
+    fun getWallet(): Flow<WalletEntity>
+    suspend fun setWallet(wallet: WalletEntity)
+}

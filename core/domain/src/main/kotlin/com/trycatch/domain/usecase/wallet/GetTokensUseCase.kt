@@ -20,26 +20,11 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.domain.usecase.wallet
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
-import com.trycatch.domain.repository.WalletRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.trycatch.domain.model.Token
+import kotlinx.coroutines.flow.Flow
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
+interface GetTokensUseCase {
+    suspend operator fun invoke(publicKey: String): Flow<Result<List<Token>>>
 }

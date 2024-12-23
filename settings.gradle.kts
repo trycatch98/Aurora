@@ -24,18 +24,22 @@ dependencyResolutionManagement {
 rootProject.name = "Aurora"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-include(":app")
+include(
+    //app
+    ":app",
 
-// core
-include(":core:designsystem")
-include(":core:domain")
-include(":core:data")
-include(":core:crypto")
-include(":core:local")
+    // core
+    ":core:designsystem",
+    ":core:domain",
+    ":core:data",
+    ":core:crypto",
+    ":core:local",
+    ":core:remote",
 
-// feature
-include(":feature:onboarding")
-include(":feature:importwallet")
-include(":feature:createwallet")
-include(":feature:home")
-include(":feature:setting")
+    // feature
+    ":feature:onboarding",
+    ":feature:importwallet",
+    ":feature:createwallet",
+    ":feature:home",
+    ":feature:setting"
+)

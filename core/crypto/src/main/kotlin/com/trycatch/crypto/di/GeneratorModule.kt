@@ -23,7 +23,9 @@
 package com.trycatch.crypto.di
 
 import com.trycatch.crypto.MnemonicGeneratorImpl
+import com.trycatch.crypto.WalletGeneratorImpl
 import com.trycatch.domain.MnemonicGenerator
+import com.trycatch.domain.WalletGenerator
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -36,4 +38,8 @@ abstract class GeneratorModule {
     @Binds
     @Singleton
     abstract fun bindMnemonicGenerator(mnemonicGeneratorImpl: MnemonicGeneratorImpl): MnemonicGenerator
+
+    @Binds
+    @Singleton
+    abstract fun bindKeyPairGenerator(keyPairGeneratorImpl: WalletGeneratorImpl): WalletGenerator
 }

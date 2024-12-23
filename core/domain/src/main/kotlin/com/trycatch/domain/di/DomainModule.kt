@@ -30,6 +30,14 @@ import com.trycatch.domain.usecase.mnemonic.GetMnemonicUseCase
 import com.trycatch.domain.usecase.mnemonic.GetMnemonicUseCaseImpl
 import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCase
 import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCaseImpl
+import com.trycatch.domain.usecase.wallet.CreateWalletUseCase
+import com.trycatch.domain.usecase.wallet.CreateWalletUseCaseImpl
+import com.trycatch.domain.usecase.wallet.GetTokensUseCase
+import com.trycatch.domain.usecase.wallet.GetTokensUseCaseImpl
+import com.trycatch.domain.usecase.wallet.GetWalletBalanceUseCase
+import com.trycatch.domain.usecase.wallet.GetWalletBalanceUseCaseImpl
+import com.trycatch.domain.usecase.wallet.GetWalletUseCase
+import com.trycatch.domain.usecase.wallet.GetWalletUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -54,4 +62,20 @@ internal abstract class DomainModule {
     @Binds
     @Singleton
     abstract fun bindSetMnemonicUseCase(useCase: SetMnemonicUseCaseImpl): SetMnemonicUseCase
+
+    @Binds
+    @Singleton
+    abstract fun bindCreateWalletUseCase(useCase: CreateWalletUseCaseImpl): CreateWalletUseCase
+
+    @Binds
+    @Singleton
+    abstract fun bindGetWalletUseCase(useCase: GetWalletUseCaseImpl): GetWalletUseCase
+
+    @Binds
+    @Singleton
+    abstract fun bindGetWalletBalanceUseCase(useCase: GetWalletBalanceUseCaseImpl): GetWalletBalanceUseCase
+
+    @Binds
+    @Singleton
+    abstract fun bindGetTokensUseCase(useCase: GetTokensUseCaseImpl): GetTokensUseCase
 }

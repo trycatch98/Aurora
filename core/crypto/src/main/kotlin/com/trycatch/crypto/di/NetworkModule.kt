@@ -20,26 +20,42 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.crypto.di
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
-import com.trycatch.domain.repository.WalletRepository
-import dagger.Binds
+import com.metaplex.lib.drivers.solana.SolanaConnectionDriver
+import com.metaplex.lib.modules.token.TokenClient
+import com.solana.Solana
+import com.solana.networking.HttpNetworkingRouter
+import com.solana.networking.Network
+import com.solana.networking.RPCEndpoint
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.net.URL
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
+internal object NetworkModule {
+    @Provides
     @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
+    fun provideSolanaEndpoint(): RPCEndpoint {
+        return RPCEndpoint.custom(
+            URL("https://soft-dawn-fire.solana-mainnet.quiknode.pro/4163a619a51effd3f6afcab195b0d61f05941be8/"), URL("https://soft-dawn-fire.solana-mainnet.quiknode.pro/4163a619a51effd3f6afcab195b0d61f05941be8/"), Network.mainnetBeta)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
+    fun provideSolana(endPoint: RPCEndpoint): Solana {
+        val network = HttpNetworkingRouter(endPoint)
+        return Solana(network)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSolanaTokenClient(endPoint: RPCEndpoint): TokenClient {
+        val solanaConnection = SolanaConnectionDriver(endPoint)
+        return TokenClient(solanaConnection)
+    }
 }

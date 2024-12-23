@@ -20,26 +20,26 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.data.model
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
-import com.trycatch.domain.repository.WalletRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.trycatch.domain.model.Wallet
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
+data class WalletEntity(
+    val privateKey: String,
+    val publicKey: String,
+    val balance: Long = 0
+) {
+    fun toDomain(): Wallet =
+        Wallet(
+            privateKey = privateKey,
+            publicKey = publicKey,
+            balance = balance
+        )
 }
+
+fun Wallet.toData(): WalletEntity =
+    WalletEntity(
+        privateKey = privateKey,
+        publicKey = publicKey,
+        balance = balance
+    )

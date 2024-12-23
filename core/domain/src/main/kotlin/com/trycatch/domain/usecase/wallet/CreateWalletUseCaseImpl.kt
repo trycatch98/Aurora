@@ -20,26 +20,29 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.domain.usecase.wallet
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
+import com.trycatch.domain.WalletGenerator
+import com.trycatch.domain.model.Wallet
 import com.trycatch.domain.repository.WalletRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.trycatch.domain.usecase.mnemonic.GetMnemonicUseCase
+import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
+class CreateWalletUseCaseImpl @Inject constructor(
+    private val walletGenerator: WalletGenerator,
+    private val walletRepository: WalletRepository,
+    private val getMnemonicUseCase: GetMnemonicUseCase
+): CreateWalletUseCase {
 
-    @Binds
-    @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
+    override suspend fun invoke() {
+        val mnemonic = getMnemonicUseCase().first()
+        val keyPair = walletGenerator.generateWallet(mnemonic.words)
+        walletRepository.setWallet(
+            Wallet(
+                publicKey = keyPair.publicKey,
+                privateKey = keyPair.privateKey
+            )
+        )
+    }
 }

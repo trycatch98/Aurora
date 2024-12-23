@@ -20,26 +20,27 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.data.model
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
-import com.trycatch.domain.repository.WalletRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.trycatch.domain.model.Token
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
+data class TokenEntity(
+    val mint: String,
+    val symbol: String,
+    val name: String,
+    val image: String,
+    val amount: String,
+    val uiAmountString: String,
+    val decimals: Int,
+) {
+    fun toDomain(): Token =
+        Token(
+            mint = mint,
+            symbol = symbol,
+            name = name,
+            image = image,
+            amount = amount,
+            uiAmountString = uiAmountString,
+            decimals = decimals,
+        )
 }

@@ -20,12 +20,10 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.crypto.di
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
-import com.trycatch.domain.repository.WalletRepository
+import com.trycatch.crypto.SolanaDataSourceImpl
+import com.trycatch.data.datasource.SolanaDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -34,12 +32,8 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+internal abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
+    abstract fun bindSolanaDataSource(solanaDataSourceImpl: SolanaDataSourceImpl): SolanaDataSource
 }

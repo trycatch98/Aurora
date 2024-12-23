@@ -20,26 +20,30 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.di
+package com.trycatch.remote.di
 
-import com.trycatch.data.repository.MnemonicRepositoryImpl
-import com.trycatch.data.repository.WalletRepositoryImpl
-import com.trycatch.domain.repository.MnemonicRepository
-import com.trycatch.domain.repository.WalletRepository
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
+internal object NetworkModule {
     @Singleton
-    abstract fun bindMnemonicRepository(mnemonicRepositoryImpl: MnemonicRepositoryImpl): MnemonicRepository
+    @Provides
+    fun provideJson(): Json = Json {
+        ignoreUnknownKeys = true
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindWalletRepository(walletRepositoryImpl: WalletRepositoryImpl): WalletRepository
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .build()
+    }
+
 }
