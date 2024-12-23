@@ -35,12 +35,31 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateWalletViewModel @Inject constructor() : ViewModel() {
+class CreateWalletViewModel @Inject constructor(
+    private val createMnemonicUseCase: CreateMnemonicUseCase
+) : ViewModel() {
     private val _uiState = MutableStateFlow(CreateWalletUiState.DEFAULT)
     val uiState = _uiState
 
     private val _sideEffects = MutableSharedFlow<CreateWalletSideEffect>()
     val sideEffects = _sideEffects.asSharedFlow()
+
+    init {
+        fetchMnemonic()
+    }
+
+    private fun fetchMnemonic() {
+        viewModelScope.launch {
+            createMnemonicUseCase()
+                .collect { mnemonic ->
+                    _uiState.update {
+                        it.copy(
+                            mnemonic = mnemonic.toPresentation()
+                        )
+                    }
+                }
+        }
+    }
 
     fun nextPhase() {
     }
