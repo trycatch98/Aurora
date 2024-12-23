@@ -31,6 +31,7 @@ include(":core:designsystem")
 include(":core:domain")
 include(":core:data")
 include(":core:crypto")
+include(":core:local")
 
 // feature
 include(":feature:onboarding")

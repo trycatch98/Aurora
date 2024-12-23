@@ -20,16 +20,10 @@
  * SOFTWARE.
  */
 
-package com.trycatch.domain.di
+package com.trycatch.local.di
 
-import com.trycatch.domain.usecase.mnemonic.CreateMnemonicUseCase
-import com.trycatch.domain.usecase.mnemonic.CreateMnemonicUseCaseImpl
-import com.trycatch.domain.usecase.mnemonic.CreateMnemonicValidationUseCase
-import com.trycatch.domain.usecase.mnemonic.CreateMnemonicValidationUseCaseImpl
-import com.trycatch.domain.usecase.mnemonic.GetMnemonicUseCase
-import com.trycatch.domain.usecase.mnemonic.GetMnemonicUseCaseImpl
-import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCase
-import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCaseImpl
+import com.trycatch.data.datasource.MnemonicDataSource
+import com.trycatch.local.datasource.MnemonicDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -38,20 +32,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class DomainModule {
+abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun bindCreateMnemonicUseCase(useCase: CreateMnemonicUseCaseImpl): CreateMnemonicUseCase
-
-    @Binds
-    @Singleton
-    abstract fun bindCreateMnemonicValidationUseCase(useCase: CreateMnemonicValidationUseCaseImpl): CreateMnemonicValidationUseCase
-
-    @Binds
-    @Singleton
-    abstract fun bindGetMnemonicUseCase(useCase: GetMnemonicUseCaseImpl): GetMnemonicUseCase
-
-    @Binds
-    @Singleton
-    abstract fun bindSetMnemonicUseCase(useCase: SetMnemonicUseCaseImpl): SetMnemonicUseCase
+    abstract fun bindMnemonicDataSource(
+        mnemonicDataSourceImpl: MnemonicDataSourceImpl
+    ): MnemonicDataSource
 }

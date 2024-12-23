@@ -20,38 +20,36 @@
  * SOFTWARE.
  */
 
-package com.trycatch.domain.di
+package com.trycatch.local.di
 
-import com.trycatch.domain.usecase.mnemonic.CreateMnemonicUseCase
-import com.trycatch.domain.usecase.mnemonic.CreateMnemonicUseCaseImpl
-import com.trycatch.domain.usecase.mnemonic.CreateMnemonicValidationUseCase
-import com.trycatch.domain.usecase.mnemonic.CreateMnemonicValidationUseCaseImpl
-import com.trycatch.domain.usecase.mnemonic.GetMnemonicUseCase
-import com.trycatch.domain.usecase.mnemonic.GetMnemonicUseCaseImpl
-import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCase
-import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCaseImpl
-import dagger.Binds
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStoreFile
+import com.trycatch.aurora.core.local.UserPreferences
+import com.trycatch.local.UserPreferencesSerializer
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class DomainModule {
-    @Binds
+object DataStoreModule {
+    @Provides
     @Singleton
-    abstract fun bindCreateMnemonicUseCase(useCase: CreateMnemonicUseCaseImpl): CreateMnemonicUseCase
-
-    @Binds
-    @Singleton
-    abstract fun bindCreateMnemonicValidationUseCase(useCase: CreateMnemonicValidationUseCaseImpl): CreateMnemonicValidationUseCase
-
-    @Binds
-    @Singleton
-    abstract fun bindGetMnemonicUseCase(useCase: GetMnemonicUseCaseImpl): GetMnemonicUseCase
-
-    @Binds
-    @Singleton
-    abstract fun bindSetMnemonicUseCase(useCase: SetMnemonicUseCaseImpl): SetMnemonicUseCase
+    fun providesUserPreferencesDataStore(
+        @ApplicationContext context: Context,
+        userPreferencesSerializer: UserPreferencesSerializer,
+    ): DataStore<UserPreferences> =
+        DataStoreFactory.create(
+            serializer = userPreferencesSerializer,
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.dataStoreFile("user_preferences.pb") }
+        )
 }

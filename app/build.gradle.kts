@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.data)
     implementation(projects.core.crypto)
+    implementation(projects.core.local)
 
     implementation(projects.feature.onboarding)
     implementation(projects.feature.importwallet)
