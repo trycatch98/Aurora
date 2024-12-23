@@ -25,9 +25,11 @@ package com.trycatch.aurora.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.trycatch.createwallet.navigation.CreateWalletRoute
 import com.trycatch.createwallet.navigation.createWalletScreen
 import com.trycatch.home.navigation.HomeRoute
 import com.trycatch.home.navigation.homeScreen
+import com.trycatch.importwallet.navigation.ImportWalletRoute
 import com.trycatch.importwallet.navigation.importWalletScreen
 import com.trycatch.onboarding.navigation.OnboardingBaseRoute
 import com.trycatch.onboarding.navigation.OnboardingRoute
@@ -44,13 +46,21 @@ fun CryptoWalletNavHost(
         startDestination = HomeRoute
     ) {
         homeScreen()
-        onboardingScreen {
-            navController.navigate(WalletSetupRoute) {
-                popUpTo(OnboardingRoute) {
-                    inclusive = true
+        onboardingScreen(
+            navigateToWalletSetup = {
+                navController.navigate(WalletSetupRoute) {
+                    popUpTo(OnboardingRoute) {
+                        inclusive = true
+                    }
                 }
+            },
+            navigateToImportWallet = {
+                navController.navigate(ImportWalletRoute)
+            },
+            navigateToCreateWallet = {
+                navController.navigate(CreateWalletRoute)
             }
-        }
+        )
         importWalletScreen()
         createWalletScreen()
         settingScreen()
