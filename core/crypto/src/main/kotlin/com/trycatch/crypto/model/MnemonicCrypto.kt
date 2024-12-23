@@ -20,24 +20,11 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.crypto.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.solana.vendor.bip39.Mnemonic
 
-@Serializable
-data object CreateWalletRoute
-
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
-}
+fun Mnemonic.toDomain() =
+    com.trycatch.domain.model.Mnemonic(
+        words = this.phrase,
+    )

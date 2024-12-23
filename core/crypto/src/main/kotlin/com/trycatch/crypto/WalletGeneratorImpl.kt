@@ -20,24 +20,28 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.crypto
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.solana.vendor.TweetNaclFast
+import com.solana.vendor.bip32.wallet.DerivableType
+import com.solana.vendor.bip32.wallet.SolanaBip44
+import com.trycatch.crypto.model.getBase58PrivateKey
+import com.trycatch.crypto.model.getBase58PublicKey
+import com.trycatch.domain.WalletGenerator
+import com.trycatch.domain.model.Wallet
+import org.bitcoinj.crypto.MnemonicCode
+import javax.inject.Inject
 
-@Serializable
-data object CreateWalletRoute
+class WalletGeneratorImpl @Inject constructor(): WalletGenerator {
+    override fun generateWallet(mnemonic: List<String>): Wallet {
+        val solanaBip44 = SolanaBip44()
+        val seed = MnemonicCode.toSeed(mnemonic, "")
+        val privateKey = solanaBip44.getPrivateKeyFromSeed(seed, DerivableType.BIP44CHANGE)
+        val keyPair = TweetNaclFast.Signature.keyPair_fromSeed(privateKey)
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
+        return Wallet(
+            publicKey = keyPair.getBase58PublicKey(),
+            privateKey = keyPair.getBase58PrivateKey()
         )
     }
 }

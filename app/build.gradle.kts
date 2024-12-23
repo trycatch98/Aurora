@@ -28,6 +28,11 @@ android {
 
 dependencies {
     implementation(projects.core.designsystem)
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+    implementation(projects.core.crypto)
+    implementation(projects.core.local)
+    implementation(projects.core.remote)
 
     implementation(projects.feature.onboarding)
     implementation(projects.feature.importwallet)

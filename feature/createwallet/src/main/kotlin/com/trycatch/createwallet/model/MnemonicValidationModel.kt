@@ -20,24 +20,19 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.createwallet.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.domain.model.Mnemonic
+import com.trycatch.domain.model.MnemonicValidation
 
-@Serializable
-data object CreateWalletRoute
-
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
+data class MnemonicValidationModel(
+    val target: String,
+    val targetIndex: Int,
+    val words: List<String>
 ) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
+    fun toDomain(): Mnemonic =
+        Mnemonic(words)
 }
+
+fun MnemonicValidation.toPresentation(): MnemonicValidationModel =
+    MnemonicValidationModel(target, targetIndex, words)

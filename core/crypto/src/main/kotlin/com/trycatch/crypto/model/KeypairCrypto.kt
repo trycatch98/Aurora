@@ -20,24 +20,13 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.crypto.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.solana.vendor.TweetNaclFast.Signature.KeyPair
+import org.bitcoinj.core.Base58
 
-@Serializable
-data object CreateWalletRoute
+fun KeyPair.getBase58PublicKey(): String =
+    Base58.encode(publicKey)
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
-}
+fun KeyPair.getBase58PrivateKey(): String =
+    Base58.encode(secretKey)

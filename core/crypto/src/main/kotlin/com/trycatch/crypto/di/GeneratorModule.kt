@@ -20,24 +20,26 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.crypto.di
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.crypto.MnemonicGeneratorImpl
+import com.trycatch.crypto.WalletGeneratorImpl
+import com.trycatch.domain.MnemonicGenerator
+import com.trycatch.domain.WalletGenerator
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-@Serializable
-data object CreateWalletRoute
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class GeneratorModule {
+    @Binds
+    @Singleton
+    abstract fun bindMnemonicGenerator(mnemonicGeneratorImpl: MnemonicGeneratorImpl): MnemonicGenerator
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
+    @Binds
+    @Singleton
+    abstract fun bindKeyPairGenerator(keyPairGeneratorImpl: WalletGeneratorImpl): WalletGenerator
 }

@@ -20,24 +20,27 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.local
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import androidx.datastore.core.CorruptionException
+import androidx.datastore.core.Serializer
+import com.google.protobuf.InvalidProtocolBufferException
+import com.trycatch.aurora.core.local.UserPreferences
+import java.io.InputStream
+import java.io.OutputStream
+import javax.inject.Inject
 
-@Serializable
-data object CreateWalletRoute
+class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferences> {
+    override val defaultValue: UserPreferences = UserPreferences.getDefaultInstance()
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
+    override suspend fun readFrom(input: InputStream): UserPreferences =
+        try {
+            UserPreferences.parseFrom(input)
+        } catch (exception: InvalidProtocolBufferException) {
+            throw CorruptionException("Cannot read proto.", exception)
+        }
+
+    override suspend fun writeTo(t: UserPreferences, output: OutputStream) {
+        t.writeTo(output)
     }
 }

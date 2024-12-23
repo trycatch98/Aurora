@@ -20,24 +20,27 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.crypto.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.data.model.TokenEntity
 
-@Serializable
-data object CreateWalletRoute
-
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
+data class TokenResponse(
+    val mint: String = "",
+    val symbol: String = "",
+    val name: String = "",
+    val image: String = "",
+    val amount: String = "",
+    val uiAmountString: String = "",
+    val decimals: Int = 0,
 ) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
+    fun toEntity(): TokenEntity =
+        TokenEntity(
+            mint = mint,
+            symbol = symbol,
+            name = name,
+            image = image,
+            amount = amount,
+            uiAmountString = uiAmountString,
+            decimals = decimals,
         )
-    }
 }

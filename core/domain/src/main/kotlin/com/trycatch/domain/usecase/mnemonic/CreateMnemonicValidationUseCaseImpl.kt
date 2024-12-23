@@ -20,24 +20,34 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.domain.usecase.mnemonic
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.domain.MnemonicGenerator
+import com.trycatch.domain.model.Mnemonic
+import com.trycatch.domain.model.MnemonicValidation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-@Serializable
-data object CreateWalletRoute
+class CreateMnemonicValidationUseCaseImpl @Inject constructor(
+    private val mnemonicGenerator: MnemonicGenerator
+): CreateMnemonicValidationUseCase {
+    override fun invoke(
+        mnemonic: Mnemonic,
+        selectionCount: Int,
+        ignoreSeeds: Set<String>
+    ): Flow<MnemonicValidation> = flow {
+        emit(
+            mnemonicGenerator.generateMnemonic(24).let { tempMnemonic ->
+                val randomSeed = mnemonic.pickRandomSeed(ignoreSeeds)
+                val randomSelection = tempMnemonic.pickRandomSelection(randomSeed, selectionCount)
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
+                MnemonicValidation(
+                    target = randomSeed,
+                    targetIndex = mnemonic.words.indexOf(randomSeed),
+                    words = (randomSelection + randomSeed).shuffled()
+                )
+            }
         )
     }
 }

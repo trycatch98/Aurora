@@ -20,24 +20,14 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.domain.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object CreateWalletRoute
-
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
-}
+data class Token(
+    val mint: String,
+    val symbol: String,
+    val name: String,
+    val image: String,
+    val amount: String,
+    val uiAmountString: String,
+    val decimals: Int,
+)

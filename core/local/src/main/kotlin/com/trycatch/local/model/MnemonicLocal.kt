@@ -20,24 +20,15 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.local.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.aurora.core.local.MnemonicLocal
+import com.trycatch.data.model.MnemonicEntity
 
-@Serializable
-data object CreateWalletRoute
+fun MnemonicLocal.toData(): MnemonicEntity =
+    MnemonicEntity(words = wordsList)
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
-}
+fun MnemonicEntity.toLocal(): MnemonicLocal =
+    MnemonicLocal.newBuilder()
+        .addAllWords(words)
+        .build()

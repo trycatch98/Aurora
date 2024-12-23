@@ -20,24 +20,25 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.domain.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object CreateWalletRoute
-
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
+class Mnemonic(
+    val words: List<String>
 ) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
+    // 니노닉 단어 생성
+    fun generateMnemonic(): Mnemonic {
+        return Mnemonic(words.shuffled().take(12))
+    }
+
+    // `ignoreSeeds`를 제외하고 랜덤으로 하나 선택
+    fun pickRandomSeed(ignoreSeeds: Set<String>): String {
+        val availableSeeds = words.filterNot { it in ignoreSeeds }
+        return availableSeeds.random()
+    }
+
+    // 주어진 단어를 제외하고 `selectionCount`만큼 랜덤으로 선택
+    fun pickRandomSelection(excludedSeed: String, selectionCount: Int): List<String> {
+        val filteredWords = words.filterNot { it == excludedSeed }
+        return filteredWords.shuffled().take(selectionCount)
     }
 }

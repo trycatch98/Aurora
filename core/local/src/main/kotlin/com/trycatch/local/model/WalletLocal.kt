@@ -20,24 +20,20 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.local.model
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.aurora.core.local.WalletLocal
+import com.trycatch.data.model.WalletEntity
 
-@Serializable
-data object CreateWalletRoute
-
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
+fun WalletLocal.toData(): WalletEntity {
+    return WalletEntity(
+        privateKey = privateKey,
+        publicKey = publicKey,
+    )
 }
+
+fun WalletEntity.toLocal(): WalletLocal =
+    WalletLocal.newBuilder()
+        .setPublicKey(publicKey)
+        .setPrivateKey(privateKey)
+        .build()

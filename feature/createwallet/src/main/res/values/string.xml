@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="heading_view_seed">Write Down Your Seed Phrase</string>"
+    <string name="description_view_seed">This is your seed phrase. Write it down on a paper and keep it in a safe place. You\'ll be asked to re-enter this phrase (in order) on the next step.</string>
+    <string name="heading_confirm_seed">Confirm Seed Phrase</string>"
+    <string name="description_confirm_seed">Select each word in the order it was\n presented to you</string>
+    <string name="heading_success">Success!</string>"
+    <string name="description_success1">You\'ve successfully protected your wallet. Remember to keep your seed phrase safe, it\'s your responsibility!</string>
+    <string name="description_success2">We cannot recover your wallet if you lose access. Please ensure your seed phrase is securely stored, as it cannot be retrieved through this app</string>
+
+    <string name="button_import">Import</string>
+    <string name="button_next">Next</string>
+</resources>

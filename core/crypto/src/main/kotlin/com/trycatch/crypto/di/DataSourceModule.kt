@@ -20,24 +20,20 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.crypto.di
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.crypto.SolanaDataSourceImpl
+import com.trycatch.data.datasource.SolanaDataSource
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-@Serializable
-data object CreateWalletRoute
-
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
+@Module
+@InstallIn(SingletonComponent::class)
+internal abstract class DataSourceModule {
+    @Binds
+    @Singleton
+    abstract fun bindSolanaDataSource(solanaDataSourceImpl: SolanaDataSourceImpl): SolanaDataSource
 }

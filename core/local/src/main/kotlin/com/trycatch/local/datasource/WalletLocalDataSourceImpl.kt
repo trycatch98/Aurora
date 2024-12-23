@@ -20,24 +20,33 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.local.datasource
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import androidx.datastore.core.DataStore
+import com.trycatch.aurora.core.local.UserPreferences
+import com.trycatch.aurora.core.local.copy
+import com.trycatch.data.datasource.WalletLocalDataSource
+import com.trycatch.data.model.WalletEntity
+import com.trycatch.local.model.toData
+import com.trycatch.local.model.toLocal
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-@Serializable
-data object CreateWalletRoute
+class WalletLocalDataSourceImpl @Inject constructor(
+    private val userPreferences: DataStore<UserPreferences>,
+): WalletLocalDataSource {
+    override fun getWallet(): Flow<WalletEntity> =
+        userPreferences.data
+            .map { preferences ->
+                preferences.wallet.toData()
+            }
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
+    override suspend fun setWallet(wallet: WalletEntity) {
+        userPreferences.updateData { preferences ->
+            preferences.copy {
+                this.wallet = wallet.toLocal()
+            }
+        }
     }
 }

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.trycatch.aurora.core.local";
+option java_multiple_files = true;
+
+message WalletLocal {
+    string private_key = 1;
+    string public_key = 2;
+}
+
+message MnemonicLocal {
+    repeated string words = 1;
+}
+
+message UserPreferences {
+    WalletLocal wallet = 1;
+    MnemonicLocal mnemonic = 2;
+}

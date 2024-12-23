@@ -20,24 +20,35 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.crypto
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.solana.vendor.bip39.Mnemonic
+import com.solana.vendor.bip39.WordCount
+import com.trycatch.crypto.model.toDomain
+import com.trycatch.domain.MnemonicGenerator
+import javax.inject.Inject
 
-@Serializable
-data object CreateWalletRoute
+class MnemonicGeneratorImpl @Inject constructor(): MnemonicGenerator {
+    override fun generateMnemonic(): com.trycatch.domain.model.Mnemonic {
+        return generateMnemonic(WordCount.COUNT_12)
+    }
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
+    override fun generateMnemonic(count: Int): com.trycatch.domain.model.Mnemonic {
+        val wordCount = when (count) {
+            12 -> WordCount.COUNT_12
+            15 -> WordCount.COUNT_15
+            18 -> WordCount.COUNT_18
+            21 -> WordCount.COUNT_21
+            24 -> WordCount.COUNT_24
+            else -> WordCount.COUNT_12
+        }
+        return generateMnemonic(wordCount)
+    }
+
+    private fun generateMnemonic(wordCount: WordCount): com.trycatch.domain.model.Mnemonic {
+        val mnemonic = Mnemonic(wordCount)
+        val phrase = mnemonic.phrase
+        Mnemonic(phrase = phrase).validate()
+        return mnemonic.toDomain()
     }
 }

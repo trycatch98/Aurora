@@ -20,24 +20,33 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.local.datasource
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import androidx.datastore.core.DataStore
+import com.trycatch.aurora.core.local.UserPreferences
+import com.trycatch.aurora.core.local.copy
+import com.trycatch.data.datasource.MnemonicDataSource
+import com.trycatch.data.model.MnemonicEntity
+import com.trycatch.local.model.toData
+import com.trycatch.local.model.toLocal
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-@Serializable
-data object CreateWalletRoute
+class MnemonicDataSourceImpl @Inject constructor(
+    private val userPreferences: DataStore<UserPreferences>,
+): MnemonicDataSource {
+    override fun getMnemonic(): Flow<MnemonicEntity> =
+        userPreferences.data
+            .map { preferences ->
+                preferences.mnemonic.toData()
+            }
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
+    override suspend fun setMnemonic(mnemonic: MnemonicEntity) {
+        userPreferences.updateData { preferences ->
+            preferences.copy {
+                this.mnemonic = mnemonic.toLocal()
+            }
+        }
     }
 }

@@ -20,24 +20,30 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.local.di
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.data.datasource.MnemonicDataSource
+import com.trycatch.data.datasource.WalletLocalDataSource
+import com.trycatch.local.datasource.MnemonicDataSourceImpl
+import com.trycatch.local.datasource.WalletLocalDataSourceImpl
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-@Serializable
-data object CreateWalletRoute
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class DataSourceModule {
+    @Binds
+    @Singleton
+    abstract fun bindMnemonicDataSource(
+        mnemonicDataSourceImpl: MnemonicDataSourceImpl
+    ): MnemonicDataSource
 
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
+    @Binds
+    @Singleton
+    abstract fun bindWalletDataSource(
+        walletDataSourceImpl: WalletLocalDataSourceImpl
+    ): WalletLocalDataSource
 }

@@ -20,24 +20,16 @@
  * SOFTWARE.
  */
 
-package com.trycatch.createwallet.navigation
+package com.trycatch.domain.usecase.mnemonic
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.trycatch.createwallet.CreateWalletRoute
-import kotlinx.serialization.Serializable
+import com.trycatch.domain.model.Mnemonic
+import com.trycatch.domain.repository.MnemonicRepository
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-@Serializable
-data object CreateWalletRoute
-
-fun NavGraphBuilder.createWalletScreen(
-    navigateToHome: () -> Unit,
-    navigateToBack: () -> Unit
-) {
-    composable<CreateWalletRoute> {
-        CreateWalletRoute(
-            navigateToHome = navigateToHome,
-            navigateToBack = navigateToBack,
-        )
-    }
+class GetMnemonicUseCaseImpl @Inject constructor(
+    private val mnemonicRepository: MnemonicRepository
+): GetMnemonicUseCase {
+    override fun invoke(): Flow<Mnemonic> =
+        mnemonicRepository.getMnemonic()
 }
