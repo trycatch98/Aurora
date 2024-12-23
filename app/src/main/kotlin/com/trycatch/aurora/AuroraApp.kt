@@ -57,43 +57,45 @@ fun CryptoWalletApp() {
     Scaffold(
         containerColor = AuroraTheme.colorScheme.gray24,
         bottomBar = {
-            AuroraNavigationBar {
-                topLevelDestinations.forEach {
-                    val selected = currentDestination?.route?.hashCode() == it.route.hashCode()
-                    AuroraNavigationBarItem(
-                        selected = selected,
-                        onClick = {
-                            navController.navigate(it.route)
-                        },
-                        icon = {
-                            Icon(
-                                modifier = Modifier.size(30.dp),
-                                painter = painterResource(it.unselectedIcon),
-                                contentDescription = null,
-                                tint = AuroraTheme.colorScheme.gray12
-                            )
-                        },
-                        selectedIcon = {
-                            Icon(
-                                modifier = Modifier.size(30.dp),
-                                painter = painterResource(it.selectedIcon),
-                                contentDescription = null,
-                                tint = Color.Unspecified
-                            )
-                        },
-                        label = {
-                            AuroraText(
-                                stringResource(it.titleTextId),
-                                style = AuroraTheme.typography.buttonMediumNormal
-                            )
-                        },
-                        selectedLabel = {
-                            AuroraGradientText(
-                                stringResource(it.titleTextId),
-                                style = AuroraTheme.typography.buttonMediumNormal
-                            )
-                        }
-                    )
+            if (shouldShowBottomNav(topLevelDestinations, currentDestination?.route)) {
+                AuroraNavigationBar {
+                    topLevelDestinations.forEach {
+                        val selected = currentDestination?.route?.hashCode() == it.route.hashCode()
+                        AuroraNavigationBarItem(
+                            selected = selected,
+                            onClick = {
+                                navController.navigate(it.route)
+                            },
+                            icon = {
+                                Icon(
+                                    modifier = Modifier.size(30.dp),
+                                    painter = painterResource(it.unselectedIcon),
+                                    contentDescription = null,
+                                    tint = AuroraTheme.colorScheme.gray12
+                                )
+                            },
+                            selectedIcon = {
+                                Icon(
+                                    modifier = Modifier.size(30.dp),
+                                    painter = painterResource(it.selectedIcon),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified
+                                )
+                            },
+                            label = {
+                                AuroraText(
+                                    stringResource(it.titleTextId),
+                                    style = AuroraTheme.typography.buttonMediumNormal
+                                )
+                            },
+                            selectedLabel = {
+                                AuroraGradientText(
+                                    stringResource(it.titleTextId),
+                                    style = AuroraTheme.typography.buttonMediumNormal
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -111,3 +113,8 @@ fun CryptoWalletApp() {
         }
     }
 }
+
+fun shouldShowBottomNav(destinations: List<TopLevelDestination>, route: Any?) =
+    destinations.any {
+        route?.hashCode() == it.route.hashCode()
+    }
