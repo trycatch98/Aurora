@@ -29,6 +29,9 @@ import com.trycatch.createwallet.navigation.createWalletScreen
 import com.trycatch.home.navigation.HomeRoute
 import com.trycatch.home.navigation.homeScreen
 import com.trycatch.importwallet.navigation.importWalletScreen
+import com.trycatch.onboarding.navigation.OnboardingBaseRoute
+import com.trycatch.onboarding.navigation.OnboardingRoute
+import com.trycatch.onboarding.navigation.WalletSetupRoute
 import com.trycatch.onboarding.navigation.onboardingScreen
 import com.trycatch.setting.navigation.settingScreen
 
@@ -41,7 +44,13 @@ fun CryptoWalletNavHost(
         startDestination = HomeRoute
     ) {
         homeScreen()
-        onboardingScreen()
+        onboardingScreen {
+            navController.navigate(WalletSetupRoute) {
+                popUpTo(OnboardingRoute) {
+                    inclusive = true
+                }
+            }
+        }
         importWalletScreen()
         createWalletScreen()
         settingScreen()
