@@ -30,6 +30,7 @@ include(":app")
 include(":core:designsystem")
 include(":core:domain")
 include(":core:data")
+include(":core:crypto")
 
 // feature
 include(":feature:onboarding")

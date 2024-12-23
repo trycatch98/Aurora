@@ -43,7 +43,7 @@ fun CryptoWalletNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeRoute
+        startDestination = OnboardingBaseRoute
     ) {
         homeScreen()
         onboardingScreen(
@@ -62,7 +62,16 @@ fun CryptoWalletNavHost(
             }
         )
         importWalletScreen()
-        createWalletScreen()
+        createWalletScreen(
+            navigateToHome = {
+                navController.navigate(HomeRoute){
+                    popUpTo(OnboardingRoute) {
+                        inclusive = true
+                    }
+                }
+            },
+            navigateToBack = navController::popBackStack
+        )
         settingScreen()
     }
 }

@@ -25,6 +25,8 @@ googleMaterial = "1.12.0"
 retrofit = "2.11.0"
 okHttp = "4.12.0"
 coil = "2.7.0"
+solanakt = "3f9e5fab6d"
+metaplex = "1ba311c3b9"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -70,6 +72,8 @@ okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okHttp
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttp" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+solanakt = { group = "com.github.trycatch98", name = "SolanaKT", version.ref = "solanakt"}
+metaplex = { group = "com.github.trycatch98", name = "metaplex-android", version.ref = "metaplex"}
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
