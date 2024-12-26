@@ -20,17 +20,18 @@
  * SOFTWARE.
  */
 
-package com.trycatch.domain.repository
+package com.trycatch.remote
 
-import com.trycatch.domain.model.Quote
-import com.trycatch.domain.model.Token
-import com.trycatch.domain.model.Wallet
-import kotlinx.coroutines.flow.Flow
+import com.trycatch.remote.model.CMCResponse
+import com.trycatch.remote.model.QuoteWrapperResponse
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Query
 
-interface WalletRepository {
-    fun getWallet(): Flow<Wallet>
-    suspend fun setWallet(wallet: Wallet)
-    suspend fun getBalance(publicKey: String): Flow<Result<String>>
-    suspend fun getTokens(publicKey: String): Flow<Result<List<Token>>>
-    suspend fun getTokenQuote(symbol: String): Flow<Quote>
+interface ApiService {
+    @GET("/v1/cryptocurrency/quotes/latest")
+    suspend fun getQuotes(
+        @Query("symbol") symbol: String,
+        @Query("convert") convert: String,
+    ): CMCResponse<QuoteWrapperResponse>
 }

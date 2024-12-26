@@ -20,17 +20,24 @@
  * SOFTWARE.
  */
 
-package com.trycatch.domain.repository
+package com.trycatch.home
 
-import com.trycatch.domain.model.Quote
-import com.trycatch.domain.model.Token
-import com.trycatch.domain.model.Wallet
-import kotlinx.coroutines.flow.Flow
+import com.trycatch.home.model.TokenModel
 
-interface WalletRepository {
-    fun getWallet(): Flow<Wallet>
-    suspend fun setWallet(wallet: Wallet)
-    suspend fun getBalance(publicKey: String): Flow<Result<String>>
-    suspend fun getTokens(publicKey: String): Flow<Result<List<Token>>>
-    suspend fun getTokenQuote(symbol: String): Flow<Quote>
+sealed class HomeUiState {
+    data object Loading : HomeUiState()
+
+    data class Success(
+        val balance: String,
+        val price: String,
+        val percentChange24h: String,
+        val sign: Sign,
+        val tokens: List<TokenModel>,
+    ) : HomeUiState()
+
+    data object Failed : HomeUiState()
+}
+
+enum class Sign {
+    PLUS, MINUS
 }

@@ -43,9 +43,13 @@ fun CryptoWalletNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = OnboardingBaseRoute
+        startDestination = HomeRoute
     ) {
-        homeScreen()
+        homeScreen(
+            navigateToOnboarding = {
+                navController.navigate(OnboardingBaseRoute)
+            }
+        )
         onboardingScreen(
             navigateToWalletSetup = {
                 navController.navigate(WalletSetupRoute) {

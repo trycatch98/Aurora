@@ -23,8 +23,11 @@
 package com.trycatch.data.repository
 
 import com.trycatch.data.datasource.SolanaDataSource
+import com.trycatch.data.datasource.TokenDataSource
 import com.trycatch.data.datasource.WalletLocalDataSource
+import com.trycatch.data.model.QuoteEntity
 import com.trycatch.data.model.toData
+import com.trycatch.domain.model.Quote
 import com.trycatch.domain.model.Token
 import com.trycatch.domain.model.Wallet
 import com.trycatch.domain.repository.WalletRepository
@@ -35,12 +38,13 @@ import javax.inject.Inject
 
 class WalletRepositoryImpl @Inject constructor(
     private val walletLocalDataSource: WalletLocalDataSource,
-    private val solanaDataSource: SolanaDataSource
+    private val solanaDataSource: SolanaDataSource,
+    private val tokenDataSource: TokenDataSource
 ): WalletRepository {
     override fun getWallet(): Flow<Wallet> =
         walletLocalDataSource.getWallet()
-            .map { wallets ->
-                wallets.toDomain()
+            .map { wallet ->
+                wallet.toDomain()
             }
 
     override suspend fun setWallet(wallet: Wallet) =
@@ -57,5 +61,10 @@ class WalletRepositoryImpl @Inject constructor(
             }
         }
         emit(tokens)
+    }
+
+    override suspend fun getTokenQuote(symbol: String): Flow<Quote> = flow {
+        val quote = tokenDataSource.getQuote(symbol).toDomain()
+        emit(quote)
     }
 }
