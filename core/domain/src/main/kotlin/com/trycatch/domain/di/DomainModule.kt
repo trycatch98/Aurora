@@ -32,6 +32,8 @@ import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCase
 import com.trycatch.domain.usecase.mnemonic.SetMnemonicUseCaseImpl
 import com.trycatch.domain.usecase.wallet.CreateWalletUseCase
 import com.trycatch.domain.usecase.wallet.CreateWalletUseCaseImpl
+import com.trycatch.domain.usecase.wallet.GetTokenQuoteUseCase
+import com.trycatch.domain.usecase.wallet.GetTokenQuoteUseCaseImpl
 import com.trycatch.domain.usecase.wallet.GetTokensUseCase
 import com.trycatch.domain.usecase.wallet.GetTokensUseCaseImpl
 import com.trycatch.domain.usecase.wallet.GetWalletBalanceUseCase
@@ -78,4 +80,9 @@ internal abstract class DomainModule {
     @Binds
     @Singleton
     abstract fun bindGetTokensUseCase(useCase: GetTokensUseCaseImpl): GetTokensUseCase
+
+    @Binds
+    @Singleton
+    abstract fun bindGetTokenQuoteUseCase(useCase: GetTokenQuoteUseCaseImpl): GetTokenQuoteUseCase
+
 }

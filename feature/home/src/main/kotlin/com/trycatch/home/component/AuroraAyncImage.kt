@@ -20,17 +20,36 @@
  * SOFTWARE.
  */
 
-package com.trycatch.domain.repository
+package com.trycatch.home.component
 
-import com.trycatch.domain.model.Quote
-import com.trycatch.domain.model.Token
-import com.trycatch.domain.model.Wallet
-import kotlinx.coroutines.flow.Flow
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 
-interface WalletRepository {
-    fun getWallet(): Flow<Wallet>
-    suspend fun setWallet(wallet: Wallet)
-    suspend fun getBalance(publicKey: String): Flow<Result<String>>
-    suspend fun getTokens(publicKey: String): Flow<Result<List<Token>>>
-    suspend fun getTokenQuote(symbol: String): Flow<Quote>
+@Composable
+fun AuroraAsyncImage(
+    data: String,
+    modifier: Modifier = Modifier,
+    size: Dp = 50.dp,
+) {
+    AsyncImage(
+        modifier = modifier
+            .size(size),
+        model = ImageRequest.Builder(LocalContext.current)
+            .crossfade(true)
+            .data(data)
+            .setHeader(
+                "User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            )
+            .transformations(CircleCropTransformation())
+            .build(),
+        contentDescription = null
+    )
 }

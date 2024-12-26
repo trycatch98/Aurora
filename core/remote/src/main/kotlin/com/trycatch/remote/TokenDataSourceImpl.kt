@@ -20,17 +20,18 @@
  * SOFTWARE.
  */
 
-package com.trycatch.domain.repository
+package com.trycatch.remote
 
-import com.trycatch.domain.model.Quote
-import com.trycatch.domain.model.Token
-import com.trycatch.domain.model.Wallet
-import kotlinx.coroutines.flow.Flow
+import com.trycatch.data.datasource.TokenDataSource
+import com.trycatch.data.model.QuoteEntity
+import javax.inject.Inject
 
-interface WalletRepository {
-    fun getWallet(): Flow<Wallet>
-    suspend fun setWallet(wallet: Wallet)
-    suspend fun getBalance(publicKey: String): Flow<Result<String>>
-    suspend fun getTokens(publicKey: String): Flow<Result<List<Token>>>
-    suspend fun getTokenQuote(symbol: String): Flow<Quote>
+class TokenDataSourceImpl @Inject constructor(
+    private val apiService: ApiService
+): TokenDataSource {
+    override suspend fun getQuote(symbol: String): QuoteEntity {
+        val response = apiService.getQuotes(symbol, "USD")
+        val quote = response.data[symbol]?.quote ?: throw Exception("Quote not found")
+        return quote.toEntity()
+    }
 }

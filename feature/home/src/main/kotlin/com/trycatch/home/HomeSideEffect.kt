@@ -20,17 +20,8 @@
  * SOFTWARE.
  */
 
-package com.trycatch.domain.repository
+package com.trycatch.home
 
-import com.trycatch.domain.model.Quote
-import com.trycatch.domain.model.Token
-import com.trycatch.domain.model.Wallet
-import kotlinx.coroutines.flow.Flow
-
-interface WalletRepository {
-    fun getWallet(): Flow<Wallet>
-    suspend fun setWallet(wallet: Wallet)
-    suspend fun getBalance(publicKey: String): Flow<Result<String>>
-    suspend fun getTokens(publicKey: String): Flow<Result<List<Token>>>
-    suspend fun getTokenQuote(symbol: String): Flow<Quote>
+sealed interface HomeSideEffect {
+    data object NavigateToOnboarding : HomeSideEffect
 }

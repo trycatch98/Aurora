@@ -20,17 +20,10 @@
  * SOFTWARE.
  */
 
-package com.trycatch.domain.repository
+package com.trycatch.data.datasource
 
-import com.trycatch.domain.model.Quote
-import com.trycatch.domain.model.Token
-import com.trycatch.domain.model.Wallet
-import kotlinx.coroutines.flow.Flow
+import com.trycatch.data.model.QuoteEntity
 
-interface WalletRepository {
-    fun getWallet(): Flow<Wallet>
-    suspend fun setWallet(wallet: Wallet)
-    suspend fun getBalance(publicKey: String): Flow<Result<String>>
-    suspend fun getTokens(publicKey: String): Flow<Result<List<Token>>>
-    suspend fun getTokenQuote(symbol: String): Flow<Quote>
+interface TokenDataSource {
+    suspend fun getQuote(symbol: String): QuoteEntity
 }
