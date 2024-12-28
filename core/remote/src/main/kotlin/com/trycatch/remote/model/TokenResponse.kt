@@ -20,20 +20,27 @@
  * SOFTWARE.
  */
 
-package com.trycatch.remote.di
+package com.trycatch.remote.model
 
-import com.trycatch.data.datasource.SolanaDataSource
-import com.trycatch.remote.datasource.SolanaDataSourceImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.trycatch.data.model.TokenEntity
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class DataSourceModule {
-    @Binds
-    @Singleton
-    abstract fun bindSolanaDataSource(solanaDataSourceImpl: SolanaDataSourceImpl): SolanaDataSource
+data class TokenResponse(
+    val mint: String = "",
+    val symbol: String = "",
+    val name: String = "",
+    val image: String = "",
+    val amount: String = "",
+    val uiAmountString: String = "",
+    val decimals: Int = 0,
+) {
+    fun toEntity(): TokenEntity =
+        TokenEntity(
+            mint = mint,
+            symbol = symbol,
+            name = name,
+            image = image,
+            amount = amount,
+            uiAmountString = uiAmountString,
+            decimals = decimals,
+        )
 }

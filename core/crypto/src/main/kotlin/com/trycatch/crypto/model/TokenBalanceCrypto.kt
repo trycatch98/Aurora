@@ -20,10 +20,23 @@
  * SOFTWARE.
  */
 
-package com.trycatch.data.datasource
+package com.trycatch.crypto.model
 
-import com.trycatch.data.model.QuoteEntity
+import com.solana.api.TokenAmountInfoResponse
+import kotlinx.serialization.Serializable
 
-interface TokenDataSource {
-    suspend fun getQuote(symbol: String): QuoteEntity
-}
+@Serializable
+data class TokenBalanceCrypto(
+    val amount: String?,
+    val decimals: Int,
+    val uiAmount: Double?,
+    val uiAmountString: String
+)
+
+fun TokenAmountInfoResponse.toCrypto() =
+    TokenBalanceCrypto(
+        amount = amount,
+        decimals = decimals,
+        uiAmount = uiAmount,
+        uiAmountString = uiAmountString
+    )

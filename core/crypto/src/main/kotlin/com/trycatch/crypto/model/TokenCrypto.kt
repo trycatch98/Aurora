@@ -20,20 +20,22 @@
  * SOFTWARE.
  */
 
-package com.trycatch.crypto.di
+package com.trycatch.crypto.model
 
-import com.trycatch.crypto.SolanaDataSourceImpl
-import com.trycatch.data.datasource.SolanaDataSource
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.metaplex.lib.modules.token.models.Token
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class DataSourceModule {
-    @Binds
-    @Singleton
-    abstract fun bindSolanaDataSource(solanaDataSourceImpl: SolanaDataSourceImpl): SolanaDataSource
-}
+
+data class TokenCrypto(
+    val mint: String,
+    val symbol: String,
+    val name: String,
+    val uri: String,
+)
+
+fun Token.toCrypto(): TokenCrypto =
+    TokenCrypto(
+        mint = mint.toBase58(),
+        symbol = symbol,
+        name = name,
+        uri = uri,
+    )

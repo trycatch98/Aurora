@@ -22,16 +22,14 @@
 
 package com.trycatch.remote
 
-import com.trycatch.remote.model.CMCResponse
-import com.trycatch.remote.model.QuoteWrapperResponse
+import com.trycatch.remote.model.IpfsResponse
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import retrofit2.http.Path
+import retrofit2.http.Url
 
-interface ApiService {
-    @GET("/v1/cryptocurrency/quotes/latest")
-    suspend fun getQuotes(
-        @Query("symbol") symbol: String,
-        @Query("convert") convert: String,
-    ): CMCResponse<QuoteWrapperResponse>
+interface IPFSApiService {
+    @GET
+    suspend fun fetchIpfsData(
+        @Url url: String
+    ): IpfsResponse
 }

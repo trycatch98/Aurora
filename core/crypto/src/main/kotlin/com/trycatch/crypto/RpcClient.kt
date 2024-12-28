@@ -20,20 +20,15 @@
  * SOFTWARE.
  */
 
-package com.trycatch.remote.di
+package com.trycatch.crypto
 
-import com.trycatch.data.datasource.SolanaDataSource
-import com.trycatch.remote.datasource.SolanaDataSourceImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.trycatch.crypto.model.TokenBalanceCrypto
+import com.trycatch.crypto.model.TokenCrypto
+import com.trycatch.crypto.model.TokenWalletCrypto
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class DataSourceModule {
-    @Binds
-    @Singleton
-    abstract fun bindSolanaDataSource(solanaDataSourceImpl: SolanaDataSourceImpl): SolanaDataSource
+interface RpcClient {
+    suspend fun getBalance(publicKey: String): Result<Long>
+    suspend fun getTokenWallets(publicKey: String): Result<List<TokenWalletCrypto>>
+    suspend fun getTokenAccountBalance(publicKey: String): Result<TokenBalanceCrypto>
+    suspend fun findByMint(publicKey: String): Result<TokenCrypto>
 }
