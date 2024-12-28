@@ -20,68 +20,61 @@
  * SOFTWARE.
  */
 
-package com.trycatch.crypto
+package com.trycatch.remote.datasource
 
-import com.metaplex.lib.modules.token.TokenClient
-import com.solana.Solana
-import com.solana.actions.getTokenWallets
-import com.solana.api.TokenAmountInfoResponse
-import com.solana.api.getBalance
-import com.solana.api.getTokenAccountBalance
-import com.solana.core.PublicKey
-import com.trycatch.crypto.model.IpfsResponse
-import com.trycatch.crypto.model.TokenResponse
+import com.trycatch.crypto.RpcClient
 import com.trycatch.data.datasource.SolanaDataSource
+import com.trycatch.data.model.QuoteEntity
 import com.trycatch.data.model.TokenEntity
+import com.trycatch.remote.CMCApiService
+import com.trycatch.remote.IPFSApiService
+import com.trycatch.remote.model.TokenBalanceResponse
+import com.trycatch.remote.model.TokenResponse
+import com.trycatch.remote.model.toResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import java.math.BigDecimal
 import javax.inject.Inject
 
 class SolanaDataSourceImpl @Inject constructor(
-    private val json: Json,
-    private val okHttpClient: OkHttpClient,
-    private val solana: Solana,
-    private val tokenClient: TokenClient
+    private val solanaRpcClient: RpcClient,
+    private val ipfsApiService: IPFSApiService,
+    private val cmcApiService: CMCApiService
 ): SolanaDataSource {
 
     companion object {
         private const val LAMPORTS_PER_SOL = 1_000_000_000
-        const val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
 
     override suspend fun getBalance(publicKey: String): Result<String> =
         withContext(Dispatchers.IO) {
-            solana.api.getBalance(PublicKey(publicKey)).map {
+            solanaRpcClient.getBalance(publicKey).map {
                 BigDecimal(it).divide(BigDecimal(LAMPORTS_PER_SOL)).toString()
             }
         }
 
     override suspend fun getTokens(publicKey: String): Result<List<TokenEntity>> =
         withContext(Dispatchers.IO) {
-            solana.action.getTokenWallets(PublicKey(publicKey)).mapCatching { walletList ->
+            solanaRpcClient.getTokenWallets(publicKey).mapCatching { walletList ->
                 walletList.map { wallet ->
                     async {
                         runCatching {
                             coroutineScope {
                                 val balanceDeferred = async {
-                                    getTokenBalance(wallet.pubkey).getOrNull()
+                                    getTokenBalance(wallet.publicKey).getOrNull()
                                 }
                                 val tokenEntityDeferred = async {
-                                    tokenClient.findByMint(PublicKey(wallet.token.address))
+                                    solanaRpcClient.findByMint(wallet.tokenAddress)
                                         .map { token ->
                                             val ipfs = fetchIpfsData(token.uri)
                                             TokenResponse(
-                                                mint = wallet.token.address,
+                                                mint = wallet.tokenAddress,
                                                 symbol = token.symbol,
                                                 name = token.name,
-                                                image = ipfs?.image ?: "",
+                                                image = ipfs,
                                             )
                                         }.getOrNull()
                                 }
@@ -106,19 +99,19 @@ class SolanaDataSourceImpl @Inject constructor(
         }
 
 
-    private suspend fun getTokenBalance(publicKey: String): Result<TokenAmountInfoResponse> {
-        return solana.api.getTokenAccountBalance(PublicKey(publicKey))
+    private suspend fun getTokenBalance(publicKey: String): Result<TokenBalanceResponse> =
+        solanaRpcClient.getTokenAccountBalance(publicKey).map {
+            it.toResponse()
+        }
+
+    private suspend fun fetchIpfsData(ipfs: String): String {
+        val data = ipfsApiService.fetchIpfsData(ipfs)
+        return data.image
     }
 
-    private fun fetchIpfsData(ipfs: String): IpfsResponse? {
-        val request = Request.Builder().url(ipfs).header("User-Agent", USER_AGENT).build()
-        val response = okHttpClient.newCall(request).execute()
-        return if (response.isSuccessful) {
-            response.body?.string()?.let { responseBody ->
-                json.decodeFromString<IpfsResponse>(responseBody)
-            }
-        } else {
-            null
-        }
+    override suspend fun getTokenQuote(symbol: String): QuoteEntity {
+        val response = cmcApiService.getQuotes(symbol, "USD")
+        val quote = response.data[symbol]?.quote ?: throw Exception("Quote not found")
+        return quote.toEntity()
     }
 }

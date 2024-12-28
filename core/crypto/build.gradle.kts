@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.aurora.android.library)
     alias(libs.plugins.aurora.hilt)
@@ -6,6 +8,14 @@ plugins {
 
 android {
     namespace = "com.trycatch.aurora.core.crypto"
+    buildFeatures.buildConfig = true
+    defaultConfig {
+        buildConfigField("String", "SOLANA_RPC_URL", getProperty("SOLANA_RPC_URL"))
+    }
+}
+
+fun getProperty(propertyKey: String): String {
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
 
 dependencies {

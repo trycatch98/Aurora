@@ -20,18 +20,11 @@
  * SOFTWARE.
  */
 
-package com.trycatch.remote
+package com.trycatch.remote.model
 
-import com.trycatch.data.datasource.TokenDataSource
-import com.trycatch.data.model.QuoteEntity
-import javax.inject.Inject
+import kotlinx.serialization.Serializable
 
-class TokenDataSourceImpl @Inject constructor(
-    private val apiService: ApiService
-): TokenDataSource {
-    override suspend fun getQuote(symbol: String): QuoteEntity {
-        val response = apiService.getQuotes(symbol, "USD")
-        val quote = response.data[symbol]?.quote ?: throw Exception("Quote not found")
-        return quote.toEntity()
-    }
-}
+@Serializable
+data class IpfsResponse(
+    val image: String
+)

@@ -23,7 +23,8 @@
 package com.trycatch.remote.di
 
 import com.trycatch.aurora.core.remote.BuildConfig
-import com.trycatch.remote.ApiService
+import com.trycatch.remote.CMCApiService
+import com.trycatch.remote.IPFSApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,20 +35,31 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class CMC
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class IPFS
+
     @Singleton
     @Provides
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
     }
 
+    @CMC
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideCMCOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val originalRequest = chain.request()
@@ -67,14 +79,54 @@ internal object NetworkModule {
             .build()
     }
 
+    @IPFS
     @Provides
     @Singleton
-    fun provideRetrofit(json: Json, okHttpClient: OkHttpClient): ApiService {
+    fun provideIPFSOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val originalRequest = chain.request()
+                val newRequest = originalRequest.newBuilder()
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                    .build()
+                chain.proceed(newRequest)
+            }
+            .addInterceptor(
+                HttpLoggingInterceptor()
+                    .apply {
+                        if (BuildConfig.DEBUG) {
+                            setLevel(HttpLoggingInterceptor.Level.BODY)
+                        }
+                    },
+            )
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCMCRetrofit(
+        json: Json,
+        @CMC okHttpClient: OkHttpClient
+    ): CMCApiService {
         return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl("https://pro-api.coinmarketcap.com/v1/cryptocurrency/")
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
-            .create(ApiService::class.java)
+            .create(CMCApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideIPFSRetrofit(
+        json: Json,
+        @IPFS okHttpClient: OkHttpClient
+    ): IPFSApiService {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://ipfs.io")
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+            .create(IPFSApiService::class.java)
     }
 }

@@ -8,6 +8,7 @@ plugins {
 
 android {
     namespace = "com.trycatch.aurora.core.remote"
+    buildFeatures.buildConfig = true
 
     defaultConfig {
         buildConfigField("String", "CMM_API_KEY", getProperty("CMM_API_KEY"))
@@ -20,6 +21,7 @@ fun getProperty(propertyKey: String): String {
 
 dependencies {
     implementation(projects.core.data)
+    implementation(projects.core.crypto)
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)

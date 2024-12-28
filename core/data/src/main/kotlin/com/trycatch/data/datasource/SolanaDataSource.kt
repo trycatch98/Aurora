@@ -22,9 +22,11 @@
 
 package com.trycatch.data.datasource
 
+import com.trycatch.data.model.QuoteEntity
 import com.trycatch.data.model.TokenEntity
 
 interface SolanaDataSource {
     suspend fun getBalance(publicKey: String): Result<String>
     suspend fun getTokens(publicKey: String): Result<List<TokenEntity>>
+    suspend fun getTokenQuote(symbol: String): QuoteEntity
 }
