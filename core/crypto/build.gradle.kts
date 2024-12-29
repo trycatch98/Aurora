@@ -20,7 +20,6 @@ fun getProperty(propertyKey: String): String {
 
 dependencies {
     implementation(projects.core.domain)
-    implementation(projects.core.data)
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.okhttp)
