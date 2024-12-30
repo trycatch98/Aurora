@@ -69,12 +69,13 @@ fun AuroraIndicator(
 fun AuroraLineIndicator(
     current: Int,
     size: Int,
-    modifier: Modifier = Modifier.width(199.dp),
+    modifier: Modifier = Modifier,
+    width: Dp = 199.dp,
     activeColor: Color = LocalColorScheme.current.blue5,
     inactiveColor: Color = LocalColorScheme.current.gray18,
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.width(width),
         verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(size) { iteration ->
@@ -108,13 +109,13 @@ fun AuroraLineIndicator(
 
 @Composable
 fun AuroraCircleIndicator(
-    modifier: Modifier = Modifier
-        .size(50.dp),
+    modifier: Modifier = Modifier,
+    size: Dp = 50.dp,
     color: Color = LocalColorScheme.current.blue5,
     trackColor: Color = LocalColorScheme.current.gray18,
 ) {
     CircularProgressIndicator(
-        modifier = modifier,
+        modifier = modifier.size(size),
         color = color,
         trackColor = trackColor,
     )
