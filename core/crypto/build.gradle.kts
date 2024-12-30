@@ -9,8 +9,14 @@ plugins {
 android {
     namespace = "com.trycatch.aurora.core.crypto"
     buildFeatures.buildConfig = true
-    defaultConfig {
-        buildConfigField("String", "SOLANA_RPC_URL", getProperty("SOLANA_RPC_URL"))
+
+    buildTypes {
+        debug {
+            buildConfigField("String", "SOLANA_RPC_URL", getProperty("SOLANA_TESTNET"))
+        }
+        release {
+            buildConfigField("String", "SOLANA_RPC_URL", getProperty("SOLANA_MAINNET"))
+        }
     }
 }
 
