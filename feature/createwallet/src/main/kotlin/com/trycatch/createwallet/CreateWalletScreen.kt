@@ -256,9 +256,9 @@ internal fun ConfirmMnemonic(
             Spacer(modifier = Modifier.height(102.dp))
 
             AuroraIndicator(
-                modifier = Modifier.width(133.99.dp),
+                modifier = Modifier.width(133.dp),
                 indicatorMode = IndicatorMode.Rectangle(
-                    width = 39.33.dp,
+                    width = 39.dp,
                     height = 2.dp
                 ),
                 current = step,

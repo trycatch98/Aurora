@@ -24,7 +24,7 @@ import com.trycatch.designsystem.theme.LocalColorScheme
 sealed class IndicatorMode {
     data class Dot(val size: Dp = 8.dp) : IndicatorMode()
     data class Rectangle(
-        val width: Dp = 39.33.dp,
+        val width: Dp = 39.dp,
         val height: Dp = 2.dp
     ) : IndicatorMode()
 }
