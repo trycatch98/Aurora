@@ -20,27 +20,23 @@
  * SOFTWARE.
  */
 
-package com.trycatch.crypto.model
+package com.trycatch.remote.model
 
-import com.trycatch.data.model.TokenEntity
+import com.trycatch.crypto.model.TokenBalanceCrypto
+import kotlinx.serialization.Serializable
 
-data class TokenResponse(
-    val mint: String = "",
-    val symbol: String = "",
-    val name: String = "",
-    val image: String = "",
-    val amount: String = "",
-    val uiAmountString: String = "",
-    val decimals: Int = 0,
-) {
-    fun toEntity(): TokenEntity =
-        TokenEntity(
-            mint = mint,
-            symbol = symbol,
-            name = name,
-            image = image,
-            amount = amount,
-            uiAmountString = uiAmountString,
-            decimals = decimals,
-        )
-}
+@Serializable
+data class TokenBalanceResponse(
+    val amount: String?,
+    val decimals: Int,
+    val uiAmount: Double?,
+    val uiAmountString: String
+)
+
+fun TokenBalanceCrypto.toResponse() =
+    TokenBalanceResponse(
+        amount = amount,
+        decimals = decimals,
+        uiAmount = uiAmount,
+        uiAmountString = uiAmountString
+    )

@@ -28,6 +28,10 @@ import com.solana.Solana
 import com.solana.networking.HttpNetworkingRouter
 import com.solana.networking.Network
 import com.solana.networking.RPCEndpoint
+import com.trycatch.aurora.core.crypto.BuildConfig
+import com.trycatch.crypto.RpcClient
+import com.trycatch.crypto.SolanaRpcClient
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,12 +41,28 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object NetworkModule {
+internal abstract class ClientModule {
+    @Binds
+    @Singleton
+    abstract fun bindSolanaRpcClient(solanaRpcClient: SolanaRpcClient): RpcClient
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal object SolanaModule {
     @Provides
     @Singleton
-    fun provideSolanaEndpoint(): RPCEndpoint {
+    fun provideSolanaRPCEndpoint(): RPCEndpoint {
+        val network = if (BuildConfig.DEBUG) {
+            Network.testnet
+        } else {
+            Network.mainnetBeta
+        }
         return RPCEndpoint.custom(
-            URL("https://soft-dawn-fire.solana-mainnet.quiknode.pro/4163a619a51effd3f6afcab195b0d61f05941be8/"), URL("https://soft-dawn-fire.solana-mainnet.quiknode.pro/4163a619a51effd3f6afcab195b0d61f05941be8/"), Network.mainnetBeta)
+            URL(BuildConfig.SOLANA_RPC_URL),
+            URL(BuildConfig.SOLANA_RPC_URL),
+            network
+        )
     }
 
     @Provides

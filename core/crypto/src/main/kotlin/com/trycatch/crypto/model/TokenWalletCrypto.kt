@@ -22,7 +22,15 @@
 
 package com.trycatch.crypto.model
 
-data class WalletCrypto(
+import com.solana.models.Wallet
+
+data class TokenWalletCrypto(
     val publicKey: String,
-    val privateKey: String
+    val tokenAddress: String,
 )
+
+fun Wallet.toCrypto(): TokenWalletCrypto =
+    TokenWalletCrypto(
+        publicKey = pubkey,
+        tokenAddress = token.address
+    )
