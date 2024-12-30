@@ -61,7 +61,7 @@ fun AuroraButton(
     textColor: Color = LocalColorScheme.current.white,
     disabledTextColor: Color = LocalColorScheme.current.gray18,
     contentPadding: PaddingValues = PaddingValues(16.dp),
-    shape: Shape = RoundedCornerShape(168.dp)
+    shape: Shape = RoundedCornerShape(168.dp),
 ) {
     Button(
         onClick = onClick,
@@ -102,7 +102,7 @@ fun AuroraGradientButton(
     textColor: Color = LocalColorScheme.current.white,
     disabledTextColor: Color = LocalColorScheme.current.gray18,
     contentPadding: PaddingValues = PaddingValues(16.dp),
-    shape: Shape = RoundedCornerShape(168.dp)
+    shape: Shape = RoundedCornerShape(168.dp),
 ) {
     Button(
         onClick = onClick,
@@ -139,16 +139,21 @@ fun AuroraSeedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: Color = LocalColorScheme.current.gray22,
+    disabledColor: Color = LocalColorScheme.current.gray23,
     textColor: Color = LocalColorScheme.current.white,
+    disabledTextColor: Color = LocalColorScheme.current.gray18,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    shape: Shape = RoundedCornerShape(8.dp)
+    shape: Shape = RoundedCornerShape(8.dp),
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = color,
+            containerColor = if (enabled)
+                color
+            else
+                disabledColor,
         ),
         contentPadding = contentPadding,
         shape = shape
@@ -156,7 +161,10 @@ fun AuroraSeedButton(
         Text(
             text = text,
             style = LocalTypography.current.paragraphRegular,
-            color = textColor
+            color = if (enabled)
+                textColor
+            else
+                disabledTextColor
         )
     }
 }
@@ -169,20 +177,25 @@ fun AuroraImageButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: Color = LocalColorScheme.current.gray21,
+    disabledColor: Color = LocalColorScheme.current.gray23,
     textColor: Color = LocalColorScheme.current.white,
+    disabledTextColor: Color = LocalColorScheme.current.gray18,
     contentPadding: PaddingValues =
         PaddingValues(
             vertical = 5.dp,
             horizontal = 15.dp
         ),
-    shape: Shape = RoundedCornerShape(168.dp)
+    shape: Shape = RoundedCornerShape(168.dp),
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = color,
+            containerColor = if (enabled)
+                color
+            else
+                disabledColor,
         ),
         contentPadding = contentPadding,
         shape = shape
@@ -199,7 +212,10 @@ fun AuroraImageButton(
             Text(
                 text = text,
                 style = LocalTypography.current.paragraphRegular,
-                color = textColor
+                color = if (enabled)
+                    textColor
+                else
+                    disabledTextColor
             )
         }
     }
@@ -212,7 +228,8 @@ fun AuroraTextButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     textColor: Color = LocalColorScheme.current.blue5,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding
+    disabledTextColor: Color = LocalColorScheme.current.gray18,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
 ) {
     TextButton(
         onClick = onClick,
@@ -223,7 +240,10 @@ fun AuroraTextButton(
         Text(
             text = text,
             style = LocalTypography.current.buttonLargeNormal,
-            color = textColor
+            color = if (enabled)
+                textColor
+            else
+                disabledTextColor
         )
     }
 }
