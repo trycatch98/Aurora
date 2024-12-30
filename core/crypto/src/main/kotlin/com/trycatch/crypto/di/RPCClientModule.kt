@@ -54,7 +54,7 @@ internal object SolanaModule {
     @Singleton
     fun provideSolanaRPCEndpoint(): RPCEndpoint {
         val network = if (BuildConfig.DEBUG) {
-            Network.devnet
+            Network.testnet
         } else {
             Network.mainnetBeta
         }
