@@ -41,6 +41,10 @@ fun AuroraIndicator(
     inactiveColor: Color = LocalColorScheme.current.gray18,
     highlightOnlyCurrent: Boolean = false,
 ) {
+    require(size >= current + 1) {
+        "The size parameter must be greater than or equal to (current + 1). Current: $current, Size: $size"
+    }
+
     val indicatorModifier = when (indicatorMode) {
         is IndicatorMode.Dot -> Modifier.size(indicatorMode.size)
         is IndicatorMode.Rectangle -> Modifier.size(indicatorMode.width, indicatorMode.height)
@@ -74,6 +78,10 @@ fun AuroraLineIndicator(
     activeColor: Color = LocalColorScheme.current.blue5,
     inactiveColor: Color = LocalColorScheme.current.gray18,
 ) {
+    require(size >= current + 1) {
+        "The size parameter must be greater than or equal to (current + 1). Current: $current, Size: $size"
+    }
+
     Row(
         modifier = modifier.width(width),
         verticalAlignment = Alignment.CenterVertically
