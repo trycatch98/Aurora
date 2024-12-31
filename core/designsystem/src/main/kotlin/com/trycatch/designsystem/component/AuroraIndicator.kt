@@ -24,7 +24,7 @@ import com.trycatch.designsystem.theme.LocalColorScheme
 sealed class IndicatorMode {
     data class Dot(val size: Dp = 8.dp) : IndicatorMode()
     data class Rectangle(
-        val width: Dp = 39.33.dp,
+        val width: Dp = 39.dp,
         val height: Dp = 2.dp
     ) : IndicatorMode()
 }
@@ -41,6 +41,10 @@ fun AuroraIndicator(
     inactiveColor: Color = LocalColorScheme.current.gray18,
     highlightOnlyCurrent: Boolean = false,
 ) {
+    require(size >= current + 1) {
+        "The size parameter must be greater than or equal to (current + 1). Current: $current, Size: $size"
+    }
+
     val indicatorModifier = when (indicatorMode) {
         is IndicatorMode.Dot -> Modifier.size(indicatorMode.size)
         is IndicatorMode.Rectangle -> Modifier.size(indicatorMode.width, indicatorMode.height)
@@ -69,12 +73,17 @@ fun AuroraIndicator(
 fun AuroraLineIndicator(
     current: Int,
     size: Int,
-    modifier: Modifier = Modifier.width(199.dp),
+    modifier: Modifier = Modifier,
+    width: Dp = 199.dp,
     activeColor: Color = LocalColorScheme.current.blue5,
     inactiveColor: Color = LocalColorScheme.current.gray18,
 ) {
+    require(size >= current + 1) {
+        "The size parameter must be greater than or equal to (current + 1). Current: $current, Size: $size"
+    }
+
     Row(
-        modifier = modifier,
+        modifier = modifier.width(width),
         verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(size) { iteration ->
@@ -108,13 +117,13 @@ fun AuroraLineIndicator(
 
 @Composable
 fun AuroraCircleIndicator(
-    modifier: Modifier = Modifier
-        .size(50.dp),
+    modifier: Modifier = Modifier,
+    size: Dp = 50.dp,
     color: Color = LocalColorScheme.current.blue5,
     trackColor: Color = LocalColorScheme.current.gray18,
 ) {
     CircularProgressIndicator(
-        modifier = modifier,
+        modifier = modifier.size(size),
         color = color,
         trackColor = trackColor,
     )
