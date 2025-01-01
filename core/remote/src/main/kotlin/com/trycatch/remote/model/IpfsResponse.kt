@@ -20,18 +20,11 @@
  * SOFTWARE.
  */
 
-package com.trycatch.remote
+package com.trycatch.remote.model
 
-import com.trycatch.remote.model.CMCResponse
-import com.trycatch.remote.model.QuoteWrapperResponse
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import kotlinx.serialization.Serializable
 
-interface ApiService {
-    @GET("/v1/cryptocurrency/quotes/latest")
-    suspend fun getQuotes(
-        @Query("symbol") symbol: String,
-        @Query("convert") convert: String,
-    ): CMCResponse<QuoteWrapperResponse>
-}
+@Serializable
+data class IpfsResponse(
+    val image: String
+)

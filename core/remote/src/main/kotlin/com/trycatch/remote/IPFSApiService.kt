@@ -20,27 +20,15 @@
  * SOFTWARE.
  */
 
-package com.trycatch.crypto.model
+package com.trycatch.remote
 
-import com.trycatch.data.model.TokenEntity
+import com.trycatch.remote.model.IpfsResponse
+import retrofit2.http.GET
+import retrofit2.http.Url
 
-data class TokenResponse(
-    val mint: String = "",
-    val symbol: String = "",
-    val name: String = "",
-    val image: String = "",
-    val amount: String = "",
-    val uiAmountString: String = "",
-    val decimals: Int = 0,
-) {
-    fun toEntity(): TokenEntity =
-        TokenEntity(
-            mint = mint,
-            symbol = symbol,
-            name = name,
-            image = image,
-            amount = amount,
-            uiAmountString = uiAmountString,
-            decimals = decimals,
-        )
+interface IPFSApiService {
+    @GET
+    suspend fun fetchIpfsData(
+        @Url url: String
+    ): IpfsResponse
 }
