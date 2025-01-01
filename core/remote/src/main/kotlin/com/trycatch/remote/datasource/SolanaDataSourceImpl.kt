@@ -69,7 +69,7 @@ class SolanaDataSourceImpl @Inject constructor(
                                 val tokenEntityDeferred = async {
                                     solanaRpcClient.findByMint(wallet.tokenAddress)
                                         .map { token ->
-                                            val ipfs = fetchIpfsData(token.uri)
+                                            val ipfs = getIpfsImage(token.uri)
                                             TokenResponse(
                                                 mint = wallet.tokenAddress,
                                                 symbol = token.symbol,
@@ -104,8 +104,8 @@ class SolanaDataSourceImpl @Inject constructor(
             it.toResponse()
         }
 
-    private suspend fun fetchIpfsData(ipfs: String): String {
-        val data = ipfsApiService.fetchIpfsData(ipfs)
+    private suspend fun getIpfsImage(ipfsUri: String): String {
+        val data = ipfsApiService.fetchIpfsData(ipfsUri)
         return data.image
     }
 
