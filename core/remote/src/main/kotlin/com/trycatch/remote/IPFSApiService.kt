@@ -24,7 +24,6 @@ package com.trycatch.remote
 
 import com.trycatch.remote.model.IpfsResponse
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Url
 
 interface IPFSApiService {

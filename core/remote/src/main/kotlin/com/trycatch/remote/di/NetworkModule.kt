@@ -44,10 +44,12 @@ import javax.inject.Singleton
 internal object NetworkModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class CMC
+    @Target(AnnotationTarget.FUNCTION, AnnotationTarget.VALUE_PARAMETER)
+    annotation class CoinMarketCap
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
+    @Target(AnnotationTarget.FUNCTION, AnnotationTarget.VALUE_PARAMETER)
     annotation class IPFS
 
     @Singleton
@@ -56,7 +58,7 @@ internal object NetworkModule {
         ignoreUnknownKeys = true
     }
 
-    @CMC
+    @CoinMarketCap
     @Provides
     @Singleton
     fun provideCMCOkHttpClient(): OkHttpClient {
@@ -106,7 +108,7 @@ internal object NetworkModule {
     @Singleton
     fun provideCMCRetrofit(
         json: Json,
-        @CMC okHttpClient: OkHttpClient
+        @CoinMarketCap okHttpClient: OkHttpClient
     ): CMCApiService {
         return Retrofit.Builder()
             .client(okHttpClient)
